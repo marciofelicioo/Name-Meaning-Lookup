@@ -72,8 +72,18 @@
       const response = await fetch(
         `https://nomes-r4jvnvend-marcios-projects-4d42dc06.vercel.app/api/${name.toLowerCase()}/`
       );
+
       if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        if (response.status === 400) {
+          resultDiv.textContent = "Invalid name. Please try another name.";
+          return;
+        } else if (response.status === 500) {
+          resultDiv.textContent = "Server error. Trying a different browser may help.";
+          alert("Please consider using a different browser or check back later.");
+          return;
+        } else {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
       }
 
       const data = await response.json();
@@ -110,7 +120,7 @@
       }
     } catch (error) {
       console.error("Error:", error);
-      resultDiv.textContent = "An error occurred: " + error.message;
+      resultDiv.textContent = "An unexpected error occurred: " + error.message;
     }
   });
   </script>
