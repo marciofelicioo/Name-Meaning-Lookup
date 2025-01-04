@@ -1,0 +1,23 @@
+{
+  "name": "name-meaning-lookup",
+  "version": "1.0.0",
+  "description": "A web application to discover the meanings and origins of names, with translations from Portuguese to English using APIs.",
+  "main": "index.html",
+  "scripts": {
+    "start": "live-server",
+    "build": "echo 'No build step required for this project.'"
+  },
+  "keywords": [
+    "name",
+    "meanings",
+    "origins",
+    "translation",
+    "javascript",
+    "frontend"
+  ],
+  "author": "marciofelicioo",
+  "license": "MIT",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}
