@@ -1,4 +1,7 @@
 # Name Meaning Lookup 🔍
+
+![Name](Name.png)
+
 An application that allows users to discover the meanings and origins of given names and translates this information into English. The project utilizes APIs for information retrieval and translation, combined with an interactive front-end.
 ## **APIs Used**
 
