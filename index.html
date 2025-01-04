@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="icon" type="image/png" href="CodeCrafters.png">
-    <title>Name Meaning</title>
-    <style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/png" href="CodeCrafters.png">
+  <title>Name Meaning</title>
+  <style>
         body {
             background-color: black;
             color: white;
@@ -47,75 +47,75 @@
     </style>
 </head>
 <body>
-<div class="container">
+  <div class="container">
     <h1>Discover Your Name Meaning</h1>
     <input type="text" id="nameInput" placeholder="Enter a name..." />
     <br />
     <button id="searchButton">Get Information</button>
     <div class="result" id="result"></div>
-</div>
+  </div>
 
-<script>
-document.getElementById('searchButton').addEventListener('click', async () => {
+  <script src="https://cdn.jsdelivr.net/npm/whatwg-fetch@3.6.2/dist/fetch.umd.min.js"></script>
+
+  <script>
+  document.getElementById('searchButton').addEventListener('click', async () => {
     const name = document.getElementById('nameInput').value;
     const resultDiv = document.getElementById('result');
     resultDiv.textContent = "Searching...";
 
     if (name.trim() === "") {
-        resultDiv.textContent = "Please enter a valid name.";
-        return;
+      resultDiv.textContent = "Please enter a valid name.";
+      return;
     }
 
     try {
-        const response = await fetch(
-            `https://nomes-r4jvnvend-marcios-projects-4d42dc06.vercel.app/api/${name.toLowerCase()}/`
-        );
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+      const response = await fetch(
+        `https://nomes-r4jvnvend-marcios-projects-4d42dc06.vercel.app/api/${name.toLowerCase()}/`
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (Array.isArray(data) && data.length > 1 && data[1].origens && data[1].significados) {
+        const nameDetails = data[1];
+        const origins = nameDetails.origens.join(", ");
+        const meanings = nameDetails.significados.join(", ");
+
+        const textToTranslate = `Nome: ${data[0]}\nOrigens: ${origins}\nSignificados: ${meanings}`;
+
+        const url =
+          "https://api.mymemory.translated.net/get?" +
+          "q=" + encodeURIComponent(textToTranslate) +
+          "&langpair=pt|en" +
+          "&ie=UTF-8&oe=UTF-8";
+
+        const translationResponse = await fetch(url, {
+          method: "GET",
+          headers: {
+            "User-Agent": "NameMeaningScript (seu-email@exemplo.com)"
+          }
+        });
+
+        if (!translationResponse.ok) {
+          throw new Error("Translation API request failed.");
         }
 
-        const data = await response.json();
+        const translationData = await translationResponse.json();
+        
+        let translated = translationData.responseData.translatedText;
+        translated = decodeURIComponent(translated);
 
-        if (Array.isArray(data) && data.length > 1 && data[1].origens && data[1].significados) {
-            const nameDetails = data[1];
-            const origins = nameDetails.origens.join(", ");
-            const meanings = nameDetails.significados.join(", ");
-
-            const textToTranslate = `Nome: ${data[0]}\nOrigens: ${origins}\nSignificados: ${meanings}`;
-
-            const url =
-                "https://api.mymemory.translated.net/get?" +
-                "q=" + encodeURIComponent(textToTranslate) +
-                "&langpair=pt|en" +
-                "&ie=UTF-8&oe=UTF-8";
-
-            const translationResponse = await fetch(url, {
-                method: "GET",
-                headers: {
-                    "User-Agent": "NameMeaningScript (seu-email@exemplo.com)"
-                }
-            });
-
-            if (!translationResponse.ok) {
-                throw new Error("Translation API request failed.");
-            }
-
-            const translationData = await translationResponse.json();
-            
-            let translated = translationData.responseData.translatedText;
-            translated = decodeURIComponent(translated);
-
-            resultDiv.innerHTML = `
-                <p>${translated.replace(/\n/g, "<br>")}</p>
-            `;
-        } else {
-            resultDiv.textContent = "No information found for this name.";
-        }
+        resultDiv.innerHTML = `<p>${translated.replace(/\n/g, "<br>")}</p>`;
+      } else {
+        resultDiv.textContent = "No information found for this name.";
+      }
     } catch (error) {
-        console.error("Error:", error);
-        resultDiv.textContent = "An error occurred: " + error.message;
+      console.error("Error:", error);
+      resultDiv.textContent = "An error occurred: " + error.message;
     }
-});
-</script>
+  });
+  </script>
 </body>
 </html>
