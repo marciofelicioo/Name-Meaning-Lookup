@@ -93,9 +93,6 @@
 
         const translationResponse = await fetch(url, {
           method: "GET",
-          headers: {
-            "User-Agent": "NameMeaningScript (seu-email@exemplo.com)"
-          }
         });
 
         if (!translationResponse.ok) {
